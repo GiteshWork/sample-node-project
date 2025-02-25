@@ -30,7 +30,11 @@ jobs:
       - name: Stop Existing Application (If Running)
         shell: powershell
         run: |
-          pm2 delete node-app -ErrorAction SilentlyContinue
+          if (pm2 list | Select-String "node-app") {
+            pm2 delete node-app
+          } else {
+            echo "App is not running, skipping stop step."
+          }
 
       - name: Start Application with PM2
         shell: powershell
