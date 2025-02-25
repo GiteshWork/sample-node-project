@@ -21,13 +21,15 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # - name: Run Tests (Optional)
-      #   run: npm test  # Remove this step if no tests exist
-
-      - name: Install PM2
-        run: npm install -g pm2
-
       - name: Stop Existing Application (If Running)
+        run: |
+          Get-Process node -ErrorAction SilentlyContinue | Stop-Process -Force -PassThru
+          Write-Output "Stopped existing node process."
+        shell: powershell
+
+      - name: Start Application in Background
+        run: |
+           npm run start
         shell: powershell
         run: |
           pm2 delete node-app -ErrorAction SilentlyContinue
