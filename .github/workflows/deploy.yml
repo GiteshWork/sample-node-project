@@ -28,14 +28,19 @@ jobs:
         run: npm install -g pm2
 
       - name: Stop Existing Application (If Running)
-        run: pm2 delete node-app || echo "App not running"
+        shell: powershell
+        run: |
+          pm2 delete node-app -ErrorAction SilentlyContinue
 
       - name: Start Application with PM2
+        shell: powershell
         run: pm2 start app.js --name "node-app"
 
       - name: Save PM2 Process List
+        shell: powershell
         run: pm2 save
 
       - name: Ensure PM2 Runs on Startup
-        run: pm2 startup | Out-String | %{$_} | Invoke-Expression
         shell: powershell
+        run: |
+          pm2 startup | Out-String | %{$_} | Invoke-Expression
