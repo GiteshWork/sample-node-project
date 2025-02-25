@@ -1,0 +1,35 @@
+name: CI/CD for Node.js App
+
+on:
+  push:
+    branches:
+      - main  # Triggers on push to main
+
+jobs:
+  build:
+    runs-on: self-hosted  # Uses your Windows runner
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Dependencies
+        run: npm install
+
+      # - name: Run Tests (Optional)
+      #   run: npm test  # Remove this step if no tests exist
+
+      - name: Stop Existing Application (If Running)
+        run: |
+          Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue
+        shell: powershell
+
+      - name: Start Application
+        run: |
+          Start-Process -NoNewWindow -FilePath "node" -ArgumentList "app.js"
+        shell: powershell
