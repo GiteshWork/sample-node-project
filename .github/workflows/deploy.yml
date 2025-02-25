@@ -44,7 +44,3 @@ jobs:
         shell: powershell
         run: pm2 save
 
-      - name: Ensure PM2 Runs on Startup
-        shell: powershell
-        run: |
-          pm2 startup | Out-String | %{$_} | Invoke-Expression
