@@ -19,26 +19,28 @@ pipeline {
             }
         }
 
-        stage('Run Tests') {
+        stage('Debug Environment & Working Directory') {
             steps {
-                bat 'npm test'  // Adjust this if you don't have tests
+                bat 'set'  // Print all environment variables
+                bat 'cd'   // Print current working directory
             }
         }
 
-        stage('Build App') {
-            steps {
-                bat 'npm run build' // Modify this if you have a build step
-            }
-        }
-
-        stage('Deploy') {
+        stage('Kill Existing Process on Port 3005') {
             steps {
                 script {
-                    // Kill any existing process running on port 3000 (if applicable)
-                    bat 'netstat -ano | findstr :3000 && taskkill /F /PID $(netstat -ano | findstr :3000 | findstr LISTENING | for /F "tokens=5" %a in ("cmd") do @echo %a) || echo No process found'
+                    bat '''
+                    for /f "tokens=5" %%a in ('netstat -ano ^| findstr :3005 ^| findstr LISTENING') do taskkill /F /PID %%a
+                    '''
+                }
+            }
+        }
 
-                    // Start the app in the background
-                    bat 'start /B node app.js'
+        stage('Deploy Application') {
+            steps {
+                script {
+                    // Start the app in a detached process and log output
+                    bat 'npm run start > app.log 2>&1'
                 }
             }
         }
@@ -47,6 +49,7 @@ pipeline {
     post {
         success {
             echo 'Build and deployment successful!'
+            bat 'type app.log'  // Print application logs to Jenkins console for debugging
         }
         failure {
             echo 'Build failed!'
