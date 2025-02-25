@@ -29,5 +29,5 @@ jobs:
 
       - name: Start Application in 
         run: |
-          cmd /c start "" npm run start
+          start /B npm start
         shell: powershell
