@@ -1,58 +1,20 @@
 pipeline {
-    agent { label 'gitesh_srfc' }  // Ensure Jenkins runs on your Windows agent
-
-    environment {
-        NODEJS_HOME = tool name: 'NodeJS'  // Use Node.js installed in Jenkins
-        PATH = "${NODEJS_HOME}/bin;${env.PATH}"
-    }
+    agent any
 
     stages {
-        stage('Clone Repository') {
+        stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/GiteshWork/sample-node-project.git'
+                git branch: 'main', url: 'https://github.com/your-repo.git'
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                bat 'npm install'  // Use 'bat' for Windows instead of 'sh'
-            }
-        }
-
-        stage('Debug Environment & Working Directory') {
-            steps {
-                bat 'set'  // Print all environment variables
-                bat 'cd'   // Print current working directory
-            }
-        }
-
-        stage('Kill Existing Process on Port 3005') {
+        stage('Start Application') {
             steps {
                 script {
-                    bat '''
-                    for /f "tokens=5" %%a in ('netstat -ano ^| findstr :3005 ^| findstr LISTENING') do taskkill /F /PID %%a
-                    '''
+                    sh 'npm install'  // Install dependencies
+                    sh 'node app.js'  // Start the app (modify this based on your entry file)
                 }
             }
-        }
-
-        stage('Deploy Application') {
-            steps {
-                script {
-                    // Start the app in a detached process and log output
-                    bat 'npm run start > app.log 2>&1'
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build and deployment successful!'
-            bat 'type app.log'  // Print application logs to Jenkins console for debugging
-        }
-        failure {
-            echo 'Build failed!'
         }
     }
 }
