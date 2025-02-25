@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent gitesh_srfc
 
     stages {
         stage('Checkout') {
@@ -11,8 +11,8 @@ pipeline {
         stage('Start Application') {
             steps {
                 script {
-                    sh 'npm install'  // Install dependencies
-                    sh 'node app.js'  // Start the app (modify this based on your entry file)
+                    bat 'npm install'  // Install dependencies
+                    bat 'node app.js'  // Start the app (modify this based on your entry file)
                 }
             }
         }
