@@ -29,5 +29,5 @@ jobs:
 
       - name: Start Application in 
         run: |
-           Start-Process -FilePath "npm" -ArgumentList "run start" -NoNewWindow -RedirectStandardOutput "app.log" -RedirectStandardError "error.log"
+          cmd /c start "" npm run start
         shell: powershell
