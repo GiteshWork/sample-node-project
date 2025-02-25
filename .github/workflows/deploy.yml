@@ -6,7 +6,7 @@ on:
       - main  # Triggers on push to main
 
 jobs:
-  build:
+  deploy:
     runs-on: self-hosted  # Uses your Windows runner
 
     steps:
@@ -28,16 +28,19 @@ jobs:
         shell: powershell
         continue-on-error: true
         run: |
-          try {
+          if (pm2 list | Select-String "node-app") {
             pm2 delete node-app
-          } catch {
+          } else {
             echo "App is not running, skipping stop step."
           }
 
       - name: Start Application with PM2
         shell: powershell
-        run: pm2 start app.js --name "node-app"
+        run: |
+          pm2 start app.js --name "node-app" --watch --time
+          pm2 save
+          pm2 restart all
 
-      - name: Save PM2 Process List
+      - name: Verify PM2 Process
         shell: powershell
-        run: pm2 save
+        run: pm2 list
