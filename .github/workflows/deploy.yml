@@ -29,5 +29,5 @@ jobs:
 
       - name: Start Application in 
         run: |
-         Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "start"
+         nssm start node-app
         shell: powershell
