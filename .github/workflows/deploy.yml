@@ -6,7 +6,7 @@ on:
       - main  # Triggers on push to main
 
 jobs:
-  deploy:
+  build:
     runs-on: self-hosted  # Uses your Windows runner
 
     steps:
@@ -21,26 +21,17 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Install PM2
-        run: npm install -g pm2
-
       - name: Stop Existing Application (If Running)
-        shell: powershell
-        continue-on-error: true
         run: |
-          if (pm2 list | Select-String "node-app") {
-            pm2 delete node-app
+          $process = Get-Process | Where-Object { $_.Path -like "*node.exe*" -and $_.CommandLine -like "*app.js*" }
+          if ($process) {
+            Stop-Process -Id $process.Id -Force
+            Write-Output "Existing app process stopped."
           } else {
-            echo "App is not running, skipping stop step."
+            Write-Output "No existing app found."
           }
-
-      - name: Start Application with PM2
         shell: powershell
-        run: |
-          pm2 start app.js --name "node-app" --watch --time
-          pm2 save
-          pm2 restart all
 
-      - name: Verify PM2 Process
+      - name: Start Application in Background
+        run: Start-Process -NoNewWindow -FilePath "node" -ArgumentList "app.js"
         shell: powershell
-        run: pm2 list
