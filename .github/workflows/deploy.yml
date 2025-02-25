@@ -24,11 +24,23 @@ jobs:
       # - name: Run Tests (Optional)
       #   run: npm test  # Remove this step if no tests exist
 
-      - name: Stop Existing Application (If Running)
-        run: |
-          Stop-Process -Name "node" -Force -ErrorAction SilentlyContinue
-        shell: powershell
+      - name: Install PM2
+        run: npm install -g pm2
 
-      - name: Start Application
-        run: node app.js
+      - name: Stop Existing Application (If Running)
         shell: powershell
+        run: |
+          pm2 delete node-app -ErrorAction SilentlyContinue
+
+      - name: Start Application with PM2
+        shell: powershell
+        run: pm2 start app.js --name "node-app"
+
+      - name: Save PM2 Process List
+        shell: powershell
+        run: pm2 save
+
+      - name: Ensure PM2 Runs on Startup
+        shell: powershell
+        run: |
+          pm2 startup | Out-String | %{$_} | Invoke-Expression
