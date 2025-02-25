@@ -29,6 +29,5 @@ jobs:
 
       - name: Start Application in Background
         run: |
-          Start-Process -FilePath "node" -ArgumentList "app.js" -NoNewWindow -PassThru
-          Write-Output "Application started successfully and running in the background!"
+           npm run start
         shell: powershell
