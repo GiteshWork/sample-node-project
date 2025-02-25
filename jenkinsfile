@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     bat 'npm install'  // Install dependencies
-                    bat 'node app.js'  // Start the app (modify this based on your entry file)
+                    bat '  // Start the app (modify this based on your entry file)
                 }
             }
         }
