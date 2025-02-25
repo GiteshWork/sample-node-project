@@ -21,18 +21,16 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      # - name: Run Tests (Optional)
-      #   run: npm test  # Remove this step if no tests exist
-
       - name: Install PM2
         run: npm install -g pm2
 
       - name: Stop Existing Application (If Running)
         shell: powershell
+        continue-on-error: true
         run: |
-          if (pm2 list | Select-String "node-app") {
+          try {
             pm2 delete node-app
-          } else {
+          } catch {
             echo "App is not running, skipping stop step."
           }
 
@@ -43,4 +41,3 @@ jobs:
       - name: Save PM2 Process List
         shell: powershell
         run: pm2 save
-
