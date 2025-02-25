@@ -27,9 +27,9 @@ jobs:
           Write-Output "Stopped existing node process."
         shell: powershell
 
-      - name: Start Application in Background
+      - name: Start Application in 
         run: |
-           npm run start
+         npm run start 
         shell: powershell
         run: |
           pm2 delete node-app -ErrorAction SilentlyContinue
