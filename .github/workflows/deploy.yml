@@ -23,12 +23,14 @@ jobs:
 
       - name: Stop Existing Application (If Running)
         run: |
-          Get-Process | Where-Object { $_.ProcessName -eq "node" } | Stop-Process -Force
+          Get-Process | Where-Object { $_.ProcessName -eq "node" } | Stop-Process -Force -ErrorAction SilentlyContinue
           Write-Output "Stopped existing node process."
         shell: powershell
 
       - name: Start Application in Background
         run: |
-          Start-Process -NoNewWindow -FilePath "node" -ArgumentList "app.js"
-          Write-Output "Application started successfully!"
+          Start-Job -ScriptBlock {
+            Start-Process -NoNewWindow -FilePath "node" -ArgumentList "app.js"
+          }
+          Write-Output "Application started successfully and running in the background!"
         shell: powershell
