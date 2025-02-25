@@ -29,5 +29,5 @@ jobs:
 
       - name: Start Application in 
         run: |
-         nssm start node-app
+         npm run start 
         shell: powershell
