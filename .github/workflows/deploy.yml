@@ -29,5 +29,5 @@ jobs:
 
       - name: Start Application in 
         run: |
-           npm run start
+          Start-Process -FilePath "node" -ArgumentList "app.js" -NoNewWindow -PassThru
         shell: powershell
