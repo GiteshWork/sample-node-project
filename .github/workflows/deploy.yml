@@ -23,15 +23,12 @@ jobs:
 
       - name: Stop Existing Application (If Running)
         run: |
-          $process = Get-Process | Where-Object { $_.Path -like "*node.exe*" -and $_.CommandLine -like "*app.js*" }
-          if ($process) {
-            Stop-Process -Id $process.Id -Force
-            Write-Output "Existing app process stopped."
-          } else {
-            Write-Output "No existing app found."
-          }
+          Get-Process | Where-Object { $_.ProcessName -eq "node" } | Stop-Process -Force
+          Write-Output "Stopped existing node process."
         shell: powershell
 
       - name: Start Application in Background
-        run: Start-Process -NoNewWindow -FilePath "node" -ArgumentList "app.js"
+        run: |
+          Start-Process -NoNewWindow -FilePath "node" -ArgumentList "app.js"
+          Write-Output "Application started successfully!"
         shell: powershell
