@@ -27,10 +27,6 @@ jobs:
           Write-Output "Stopped existing node process."
         shell: powershell
         
-      - name: Start application in the background (CMD)
-        run: start /B cmd /c "npm run start"
-        shell: cmd
-
-      - name: Keep job running to prevent termination
-        run: timeout /t 99999
-        shell: cmd
+      - name: Start application 
+        run:  "npm run start"
+        shell: powershell
