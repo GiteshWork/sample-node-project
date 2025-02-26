@@ -27,7 +27,8 @@ jobs:
           Write-Output "Stopped existing node process."
         shell: powershell
 
-      - name: Start Application in 
-        run: |
-         npm run start
-        shell: powershell
+      - name: Start application in the background
+        run: npm run start &
+
+      - name: Continue with other steps
+        run: echo "App started, continuing workflow..."
