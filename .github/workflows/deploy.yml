@@ -27,5 +27,5 @@ jobs:
           Write-Output "Stopped existing node process."
         shell: powershell
         
-      - name: Start Node.js app in the background
-        run: start app.js
+      - name: Start Node.js app 
+        run: npm run start 
