@@ -27,11 +27,5 @@ jobs:
           Write-Output "Stopped existing node process."
         shell: powershell
         
-      - name: Install PM2
-        run: npm install -g pm2
- 
       - name: Start Node.js app in the background
-        run: pm2 start app.js
-
-      - name: Verify PM2 Process
-        run: pm2 list
+        run: start app.js
