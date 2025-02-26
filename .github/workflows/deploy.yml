@@ -28,5 +28,5 @@ jobs:
         shell: powershell
         
       - name: Start application 
-        run:  "npm run build"
+        run:  "pm2 start app.js"
         shell: powershell
