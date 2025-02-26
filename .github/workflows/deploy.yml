@@ -26,9 +26,7 @@ jobs:
           Get-Process node -ErrorAction SilentlyContinue | Stop-Process -Force -PassThru
           Write-Output "Stopped existing node process."
         shell: powershell
-
-      - name: Start application in the background
-        run: npm run start &
-
-      - name: Continue with other steps
-        run: echo "App started, continuing workflow..."
+        
+      - name: Start application in background (Windows)
+        run: Start-Process -NoNewWindow -FilePath "npm" -ArgumentList "run start"
+        shell: pwsh
